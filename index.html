@@ -30,7 +30,7 @@
       try {
         const response = await fetch(file);
         if (!response.ok) throw new Error("Помилка " + response.status);
-        const items = await response.json();   // JSON → масив
+        const items = await response.json();   // JSON в масив
 
         const h = document.createElement("h2");
         h.textContent = title;
