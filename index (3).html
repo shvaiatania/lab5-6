@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Лабораторна робота №5–6. Завдання 1</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+    nav a { margin-right: 20px; font-size: 1.2rem; }
+    #content { background: yellow; color: #000; margin-top: 20px; padding: 16px 20px; min-height: 120px; border-radius: 6px; }
+    #content li { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <h1>Завантаження списків</h1>
+  <nav>
+    <a href="1.txt" id="langs">мови</a>
+    <a href="2.txt" id="students">студенти</a>
+    <a href="weather.html">погода</a>
+  </nav>
+
+  <!-- Блок жовтого кольору -->
+  <div id="content">Оберіть посилання, щоб завантажити список.</div>
+
+  <script>
+    const content = document.getElementById("content");
+
+    async function loadList(file, title) {
+      content.textContent = "Завантаження...";
+      try {
+        const response = await fetch(file);
+        if (!response.ok) throw new Error("Помилка " + response.status);
+        const items = await response.json();   // JSON → масив
+
+        const h = document.createElement("h2");
+        h.textContent = title;
+        const ul = document.createElement("ul");
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        content.replaceChildren(h, ul);
+      } catch (err) {
+        content.textContent = "Не вдалося завантажити " + file + ": " + err.message;
+      }
+    }
+
+    document.getElementById("langs").addEventListener("click", (e) => {
+      e.preventDefault();
+      loadList("1.txt", "Мови програмування");
+    });
+    document.getElementById("students").addEventListener("click", (e) => {
+      e.preventDefault();
+      loadList("2.txt", "Студенти");
+    });
+  </script>
+</body>
+</html>
